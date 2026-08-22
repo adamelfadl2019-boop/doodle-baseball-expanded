@@ -1,0 +1,79 @@
+name: Bug report
+description: Report something that is broken in Doodle Baseball Expanded.
+title: "[BUG] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Doodle Baseball Expanded.
+        If possible, press F9 in-game and include the generated debug report.
+
+  - type: input
+    id: version
+    attributes:
+      label: DBE version
+      description: Which version are you using?
+      placeholder: "V19 / v19.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where did the problem happen?
+      options:
+        - Launcher / installation
+        - Normal gameplay
+        - Pitch / variant
+        - Defense / foul / wall physics
+        - Game mode
+        - UI / display
+        - Debug tools
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the problem clearly.
+      placeholder: "I expected... but instead..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Tell us how to make the bug happen again.
+      placeholder: |
+        1. Launch the mod
+        2. Select...
+        3. Hit...
+        4. Bug happens
+    validations:
+      required: true
+
+  - type: textarea
+    id: debug
+    attributes:
+      label: F9 debug report / error text
+      description: Paste the F9 issue report, DBE_LAST_ERROR.txt contents, or other useful error information.
+      render: text
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser / operating system
+      placeholder: "Edge on Windows 11"
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Quick checks
+      options:
+        - label: I am using a fresh copy of the current release.
+        - label: I checked that this issue has not already been reported.
