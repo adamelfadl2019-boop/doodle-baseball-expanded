@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+DBE_LAST_ERROR.txt
+*.log
+.env
+.vscode/
+.idea/
+release/
