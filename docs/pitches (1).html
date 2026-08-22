@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DBE V19 — 3,000 Pitch Encyclopedia</title>
+<style>
+body{margin:0;background:#081018;color:#eef7ff;font:13px system-ui}
+.top{position:sticky;top:0;background:#0d1824f4;padding:16px;border-bottom:1px solid #ffffff18;z-index:2}
+h1{margin:0}
+.sub{font-size:11px;color:#9fb0c2;margin:5px 0 10px}
+.filters{display:grid;grid-template-columns:1fr 170px 150px;gap:7px}
+input,select,button{background:#111c28;color:white;border:1px solid #ffffff20;border-radius:9px;padding:9px}
+button{cursor:pointer;font-weight:700}
+button:disabled{opacity:.4;cursor:default}
+option{color:#000}
+#count{font-size:10px;color:#69dcff;margin-top:8px}
+main{max-width:1050px;margin:auto;padding:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.card{border:1px solid #ffffff12;background:#ffffff07;border-radius:12px;padding:10px}
+.name{font-weight:900}
+.meta{font-size:9px;color:#8fa3b5;margin-top:3px}
+.desc{font-size:10px;color:#c1cdd8;line-height:1.45;margin-top:6px}
+.sig{font-size:9px;color:#69dcff;margin-top:5px}
+.pager{max-width:1050px;margin:0 auto 28px;padding:0 12px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+#pageInfo{font-size:11px;color:#9fb0c2;min-width:120px;text-align:center}
+@media(max-width:700px){main,.filters{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>⚾ DBE V19 — 3,000 Named Pitches</h1>
+  <div class="sub">Search and browse the complete pitch identity catalog used by the mod.</div>
+  <div class="filters">
+    <input id="q" placeholder="Magic Zoomball, Black Hole, fastball…">
+    <select id="cat"><option value="">All worlds</option></select>
+    <select id="style"><option value="">All styles</option></select>
+  </div>
+  <div id="count">Loading…</div>
+</div>
+
+<main id="list"></main>
+
+<div class="pager">
+  <button id="first">⏮ First</button>
+  <button id="prev">← Previous</button>
+  <span id="pageInfo"></span>
+  <button id="next">Next →</button>
+  <button id="last">Last ⏭</button>
+</div>
+
+<script>
+let all=[];
+let filtered=[];
+let page=1;
+const PAGE_SIZE=100;
+
+const LOCAL_DATA='data/pitches.json';
+const RAW_FALLBACK='https://raw.githubusercontent.com/adamelfadl2019-boop/doodle-baseball-expanded/main/docs/data/pitches.json';
+
+const q=document.querySelector('#q');
+const cat=document.querySelector('#cat');
+const style=document.querySelector('#style');
+const list=document.querySelector('#list');
+const count=document.querySelector('#count');
+const first=document.querySelector('#first');
+const prev=document.querySelector('#prev');
+const next=document.querySelector('#next');
+const last=document.querySelector('#last');
+const pageInfo=document.querySelector('#pageInfo');
+
+async function fetchJson(url){
+  const r=await fetch(url,{cache:'no-store'});
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+async function loadCatalog(){
+  try{
+    return await fetchJson(LOCAL_DATA);
+  }catch(localErr){
+    console.warn('Local catalog failed, using GitHub raw fallback:', localErr);
+    return await fetchJson(RAW_FALLBACK);
+  }
+}
+
+loadCatalog()
+  .then(d=>{
+    if(!Array.isArray(d)) throw new Error('Pitch catalog is not an array.');
+    all=d;
+    for(const x of [...new Set(all.map(p=>p.category).filter(Boolean))].sort()){
+      cat.insertAdjacentHTML('beforeend',`<option>${escapeHtml(x)}</option>`);
+    }
+    for(const x of [...new Set(all.map(p=>p.style).filter(Boolean))].sort()){
+      style.insertAdjacentHTML('beforeend',`<option>${escapeHtml(x)}</option>`);
+    }
+    applyFilters();
+  })
+  .catch(err=>{
+    count.textContent='Could not load pitch catalog.';
+    list.innerHTML=`<article class="card"><div class="name">Catalog load error</div><div class="desc">${escapeHtml(String(err))}</div></article>`;
+  });
+
+function escapeHtml(v){
+  return String(v ?? '').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+}
+
+function applyFilters(){
+  const s=q.value.trim().toLowerCase();
+  filtered=all.filter(p=>
+    (!s || (`${p.id} ${p.name} ${p.desc} ${p.theme} ${p.form}`).toLowerCase().includes(s)) &&
+    (!cat.value || p.category===cat.value) &&
+    (!style.value || p.style===style.value)
+  );
+  page=1;
+  draw();
+}
+
+function draw(){
+  const pages=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
+  page=Math.min(Math.max(page,1),pages);
+  const start=(page-1)*PAGE_SIZE;
+  const visible=filtered.slice(start,start+PAGE_SIZE);
+
+  count.textContent=`${filtered.length.toLocaleString()} / ${all.length.toLocaleString()} pitches • showing ${filtered.length ? (start+1).toLocaleString() : 0}–${Math.min(start+PAGE_SIZE,filtered.length).toLocaleString()}`;
+
+  list.innerHTML=visible.map(p=>`
+    <article class="card">
+      <div class="name">#${escapeHtml(p.id)} ${escapeHtml(p.icon||'⚾')} ${escapeHtml(p.name)}</div>
+      <div class="meta">${escapeHtml(p.category)} • ${escapeHtml(p.theme)} • ${escapeHtml(p.style)}</div>
+      <div class="desc">${escapeHtml(p.desc)}</div>
+      <div class="sig">Speed ${escapeHtml(p.speed)} • timing ${escapeHtml(p.center)} • window ${escapeHtml(p.window)}</div>
+    </article>
+  `).join('');
+
+  if(!visible.length){
+    list.innerHTML='<article class="card"><div class="name">No pitches found</div><div class="desc">Try changing the search or filters.</div></article>';
+  }
+
+  pageInfo.textContent=`Page ${page.toLocaleString()} of ${pages.toLocaleString()}`;
+  first.disabled=prev.disabled=page<=1;
+  next.disabled=last.disabled=page>=pages;
+}
+
+q.oninput=applyFilters;
+cat.onchange=applyFilters;
+style.onchange=applyFilters;
+
+first.onclick=()=>{page=1;draw();window.scrollTo({top:0,behavior:'smooth'});}
+prev.onclick=()=>{page--;draw();window.scrollTo({top:0,behavior:'smooth'});}
+next.onclick=()=>{page++;draw();window.scrollTo({top:0,behavior:'smooth'});}
+last.onclick=()=>{page=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));draw();window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>
