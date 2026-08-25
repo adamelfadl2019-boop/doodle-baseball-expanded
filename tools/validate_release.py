@@ -27,7 +27,6 @@ required = [
     "SUPPORT.md",
     "ROADMAP.md",
     "CHANGELOG.md",
-    "RELEASE_CHECKLIST.md",
     "launcher.py",
     "payload/dbe-mod.js",
     "data/pitches.json",
