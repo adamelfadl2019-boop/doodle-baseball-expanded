@@ -1,24 +1,46 @@
-# Doodle Baseball Expanded V19 — GitHub Release Edition
+# Doodle Baseball Expanded V19
 
-V19 is the public-release polish pass for the completed gameplay roadmap.
+V19 is the first version I consider a proper public release.
 
-## Headline changes
+## Main features
 
-- New polished in-game HOME/showcase tab.
-- New F9 runtime debug overlay.
-- New DEBUG tab with self-check, event timeline, Safe Mode, copyable GitHub bug reports, and JSON export.
-- Launcher `--diagnose` dry-run mode.
-- Launcher build report with source SHA-256 and verified patch list.
-- Installer errors write `DBE_LAST_ERROR.txt`.
-- GitHub Actions release validation.
-- Bug/feature issue forms and pull-request template.
-- Pages-ready preview website and 3,000-pitch browser.
-- Repository cleanup: old generated encyclopedia files removed from the release tree.
+- 3,000 named pitches
+- 16 distinct movement variants
+- 48,000 pitch/variant Gauntlet combinations
+- 50 signature pitches
+- Perfectionism
+- Boss Ladder
+- Legendary Rush
+- Mystery Box
+- Arcade Frenzy
+- peanut defense, fly catches, throws to first, foul rules, and wall physics
+- mastery, achievements, missions, and character traits
+- F9 runtime debugging and exportable bug reports
 
-## Gameplay carried forward
+## For players
 
-3,000 named pitches, 16 variants, 48,000 Gauntlet combinations, Perfectionism, Boss Ladder, real peanut defense, fly outs, throws to first, foul rules, wall physics, food traits, achievements, mastery, missions, legendary effects, and multiple arcade modes.
+Download the installer from the GitHub release, extract it, then run:
 
-## Important
+```text
+START_REAL_MOD.bat
+```
 
-This repository does not include the original game's assets/source. Users provide a compatible game repository separately and the launcher generates modded copies locally.
+The launcher creates separate modded launch files and does not overwrite the original `game.js`.
+
+## If something breaks
+
+Press **F9** first if the game itself is running.
+
+For launcher/install problems:
+
+```bash
+python launcher.py --diagnose
+```
+
+Then open a bug report:
+
+https://github.com/adamelfadl2019-boop/doodle-baseball-expanded/issues/new/choose
+
+## Important legal note
+
+This repository does not include or relicense the original Google Doodle Baseball artwork/assets/source. Doodle Baseball Expanded is an unofficial fan-made modification project and is not affiliated with or endorsed by Google.

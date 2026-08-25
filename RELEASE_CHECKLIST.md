@@ -1,16 +1,38 @@
-# V19 release checklist
+# Release checklist
+
+Use this for future public releases or patches.
+
+## Before packaging
 
 - [ ] `python tools/validate_release.py`
 - [ ] `python launcher.py --diagnose --repo PATH_TO_GAME`
-- [ ] Play at least 30 normal pitches
-- [ ] Verify F9 overlay
-- [ ] Export a debug JSON
-- [ ] Verify foul at 2 strikes does not create another strike
-- [ ] Verify a real peanut fly catch
-- [ ] Verify a throw to first gives SAFE/OUT
-- [ ] Verify Perfectionism streak reset/build
-- [ ] Verify Boss Ladder advances on HR
-- [ ] Verify HOME tab spotlight and buttons
-- [ ] Open `docs/index.html`
-- [ ] Open `docs/pitches.html`
-- [ ] Create GitHub release ZIP from the validated folder
+- [ ] Fresh install from a clean extracted folder
+- [ ] Confirm the original `game.js` is not overwritten
+
+## Gameplay smoke test
+
+- [ ] 30+ normal pitches without a broken game state
+- [ ] F9 overlay opens and updates
+- [ ] Foul at two strikes does not become strike three
+- [ ] Real peanut fly catch works
+- [ ] Throw to first resolves SAFE/OUT
+- [ ] Perfectionism streak builds and resets
+- [ ] Boss Ladder advances only after the required result
+- [ ] HOME / mode controls still work
+
+## Public files
+
+- [ ] README links work
+- [ ] GitHub Pages homepage loads
+- [ ] Pitch encyclopedia loads all 3,000 entries
+- [ ] CHANGELOG updated
+- [ ] release notes updated
+- [ ] VERSION matches the release
+- [ ] installer ZIP tested after downloading the final artifact
+
+## Publish
+
+- [ ] Create/update tag
+- [ ] Upload player installer ZIP
+- [ ] Mark stable release as Latest
+- [ ] Test the download as a normal player
