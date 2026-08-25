@@ -1,4 +1,4 @@
-name: Validate DBE Release
+name: Validate repository
 
 on:
   push:
@@ -12,7 +12,6 @@ permissions:
 
 jobs:
   validate:
-    name: Validate V19 repository
     runs-on: ubuntu-latest
 
     steps:
@@ -29,5 +28,11 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Run release validator
+      - name: Check launcher syntax
+        run: python -m py_compile launcher.py
+
+      - name: Check runtime JavaScript syntax
+        run: node --check payload/dbe-mod.js
+
+      - name: Validate DBE data and public files
         run: python tools/validate_release.py

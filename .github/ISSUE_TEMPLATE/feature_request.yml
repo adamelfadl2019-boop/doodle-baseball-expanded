@@ -1,36 +1,35 @@
 name: Feature request
-description: Suggest an improvement or new idea for Doodle Baseball Expanded.
-title: "[FEATURE] "
+description: Suggest something that would make the mod better.
+title: "[IDEA] "
 labels:
   - enhancement
 body:
   - type: markdown
     attributes:
       value: |
-        Feature ideas are welcome. Quality and gameplay value matter more than adding features just to increase the feature count.
+        Ideas are welcome. The project is intentionally prioritizing quality over adding features just to make the list longer.
 
   - type: input
     id: summary
     attributes:
-      label: Feature summary
-      description: Give the idea a short name or one-sentence summary.
-      placeholder: "Example: Weekly rotating challenge"
+      label: Short version
+      placeholder: "Weekly rotating challenge"
     validations:
       required: true
 
   - type: textarea
     id: idea
     attributes:
-      label: How should it work?
-      description: Explain the gameplay or behavior you want.
+      label: How would it work?
+      description: Explain what the player would actually do or see.
     validations:
       required: true
 
   - type: textarea
     id: value
     attributes:
-      label: Why would this improve the mod?
-      description: What problem does it solve or what makes it fun?
+      label: Why would it make the mod better?
+      description: What problem does it solve, or what makes it fun?
     validations:
       required: true
 
@@ -39,9 +38,9 @@ body:
     attributes:
       label: Rough size
       options:
-        - Small polish / quality-of-life change
+        - Small polish / quality-of-life
         - Medium feature
-        - Large system or mode
+        - Large mode / system
         - Not sure
     validations:
       required: true
